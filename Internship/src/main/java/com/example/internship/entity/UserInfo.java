@@ -16,9 +16,12 @@ public class UserInfo {
     @GeneratedValue
     private Long id;
     private String name;
+    private String fullName;
     private String email;
     private String password;
     private String company;
+    private String resumeUrl;
+    private String githubUrl;
 
     private String roles;
     private boolean enabled;

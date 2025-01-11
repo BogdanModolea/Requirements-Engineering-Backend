@@ -44,24 +44,34 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
-        System.out.println("Authorities: " + authentication.getAuthorities());
         if (authentication.isAuthenticated()) {
             return jwtService.generateToken(authRequest.getUsername());
         }
         return "Invalid";
     }
 
-    /**
-     * get a user by username
-     *
-     * @param username
-     * @return
-     */
     public Optional<UserInfo> getUser(String username) {
         return userInfoRepository.findByName(username);
     }
 
     public String getUserRole(String username) {
         return userInfoRepository.getRoleByUsername(username);
+    }
+
+    public UserInfo updateUrls(String authorizationHeader, String resumeUrl, String githubUrl) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+
+        UserInfo user = userInfoRepository.findByName(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (resumeUrl != null && !resumeUrl.isEmpty()) {
+            user.setResumeUrl(resumeUrl);
+        }
+        if (githubUrl != null && !githubUrl.isEmpty()) {
+            user.setGithubUrl(githubUrl);
+        }
+
+        return userInfoRepository.save(user);
     }
 }

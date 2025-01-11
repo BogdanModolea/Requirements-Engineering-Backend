@@ -10,10 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -24,12 +21,22 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public void addUser(@RequestBody UserInfo userInfo){
+    public void addUser(@RequestBody UserInfo userInfo) {
         userService.addUser(userInfo);
     }
 
     @PostMapping("/authenticate")
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletRequest request) {
         return userService.authenticate(authRequest);
+    }
+
+    @GetMapping("/getUserInfo/{username}")
+    public UserInfo getUserInfo(@PathVariable String username) {
+        return userService.getUser(username).get();
+    }
+
+    @PatchMapping("/{userId}/update-urls")
+    public UserInfo updateUrls(@RequestParam(required = false) String resumeUrl, @RequestParam(required = false) String githubUrl, @RequestHeader("Authorization") String authorizationHeader) {
+        return userService.updateUrls(authorizationHeader, resumeUrl, githubUrl);
     }
 }
