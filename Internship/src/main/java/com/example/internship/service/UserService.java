@@ -2,6 +2,7 @@ package com.example.internship.service;
 
 import com.example.internship.dto.AuthRequest;
 import com.example.internship.dto.StringDTO;
+import com.example.internship.dto.UpdateUserDTO;
 import com.example.internship.entity.UserInfo;
 import com.example.internship.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,18 +71,18 @@ public class UserService {
         return userInfoRepository.getRoleByUsername(username);
     }
 
-    public UserInfo updateUrls(String authorizationHeader, String resumeUrl, String githubUrl) {
+    public UserInfo updateUrls(String authorizationHeader, UpdateUserDTO updateUser) {
         String token = authorizationHeader.substring(7);
         String username = jwtService.extractUsername(token);
 
         UserInfo user = userInfoRepository.findByName(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        if (resumeUrl != null && !resumeUrl.isEmpty()) {
-            user.setResumeUrl(resumeUrl);
+        if (updateUser.getResumeUrl() != null && !updateUser.getResumeUrl().isEmpty()) {
+            user.setResumeUrl(updateUser.getResumeUrl());
         }
-        if (githubUrl != null && !githubUrl.isEmpty()) {
-            user.setGithubUrl(githubUrl);
+        if (updateUser.getGithubUrl() != null && !updateUser.getGithubUrl().isEmpty()) {
+            user.setGithubUrl(updateUser.getGithubUrl() );
         }
 
         return userInfoRepository.save(user);

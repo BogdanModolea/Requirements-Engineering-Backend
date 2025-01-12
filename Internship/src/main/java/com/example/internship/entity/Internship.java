@@ -14,7 +14,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Internship {
+public class
+Internship {
     @Id
     @GeneratedValue
     private Long id;

@@ -2,6 +2,7 @@ package com.example.internship.controller;
 
 import com.example.internship.dto.AuthRequest;
 import com.example.internship.dto.StringDTO;
+import com.example.internship.dto.UpdateUserDTO;
 import com.example.internship.entity.UserInfo;
 import com.example.internship.service.JwtService;
 import com.example.internship.service.UserService;
@@ -43,8 +44,8 @@ public class UserController {
         return userService.getUserByToken(authorizationHeader);
     }
 
-    @PatchMapping("/{userId}/update-urls")
-    public UserInfo updateUrls(@RequestParam(required = false) String resumeUrl, @RequestParam(required = false) String githubUrl, @RequestHeader("Authorization") String authorizationHeader) {
-        return userService.updateUrls(authorizationHeader, resumeUrl, githubUrl);
+    @PutMapping("/update-urls")
+    public UserInfo updateUrls(@RequestBody UpdateUserDTO updateUser, @RequestHeader("Authorization") String authorizationHeader) {
+        return userService.updateUrls(authorizationHeader, updateUser);
     }
 }

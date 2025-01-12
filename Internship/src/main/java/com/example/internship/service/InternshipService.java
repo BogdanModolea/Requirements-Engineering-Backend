@@ -1,8 +1,10 @@
 package com.example.internship.service;
 
 import com.example.internship.entity.Internship;
+import com.example.internship.entity.UserInfo;
 import com.example.internship.entity.enums.Technology;
 import com.example.internship.repository.InternshipRepository;
+import com.example.internship.repository.UserInfoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -20,9 +22,19 @@ public class InternshipService {
     private InternshipRepository internshipRepository;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private JwtService jwtService;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     public void addInternship(Internship internship, String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+        UserInfo user = userInfoRepository.findByName(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
         internship.setOpen(true);
+        internship.setCompany(user.getCompany());
         internshipRepository.save(internship);
     }
 
