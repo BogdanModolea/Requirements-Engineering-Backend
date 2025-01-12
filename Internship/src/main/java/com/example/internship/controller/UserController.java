@@ -38,6 +38,11 @@ public class UserController {
         return userService.getUser(username).get();
     }
 
+    @GetMapping("/getUserInfoByToken")
+    public UserInfo getUserInfoByToken(@RequestHeader("Authorization") String authorizationHeader) {
+        return userService.getUserByToken(authorizationHeader);
+    }
+
     @PatchMapping("/{userId}/update-urls")
     public UserInfo updateUrls(@RequestParam(required = false) String resumeUrl, @RequestParam(required = false) String githubUrl, @RequestHeader("Authorization") String authorizationHeader) {
         return userService.updateUrls(authorizationHeader, resumeUrl, githubUrl);

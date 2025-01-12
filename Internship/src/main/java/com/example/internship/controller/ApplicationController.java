@@ -21,14 +21,19 @@ public class ApplicationController {
         return applicationService.applyForInternship(userId, internshipId);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<Application> getApplicationsByUser(@PathVariable Long userId) {
-        return applicationService.getApplicationsByUser(userId);
+    @GetMapping("/user")
+    public List<Application> getApplicationsByUser(@RequestHeader("Authorization") String authorizationHeader) {
+        return applicationService.getApplicationsByUser(authorizationHeader);
     }
 
     @GetMapping("/internship/{internshipId}")
     public List<Application> getApplicationsByInternship(@PathVariable Long internshipId) {
         return applicationService.getApplicationsByInternship(internshipId);
+    }
+
+    @GetMapping("/canApply/{internshipId}")
+    public Boolean canStudentApply(@PathVariable Long internshipId, @RequestHeader("Authorization") String authorizationHeader) {
+        return applicationService.canStudentApply(internshipId, authorizationHeader);
     }
 
     @PostMapping("/accept/{applicationId}")

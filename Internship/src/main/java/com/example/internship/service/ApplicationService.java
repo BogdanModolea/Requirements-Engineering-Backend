@@ -42,7 +42,13 @@ public class ApplicationService {
         return applicationRepository.save(application);
     }
 
-    public List<Application> getApplicationsByUser(Long userId) {
+    public List<Application> getApplicationsByUser(String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+        UserInfo user = userInfoRepository.findByName(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        Long userId = user.getId();
+
         return applicationRepository.findAll().stream()
                 .filter(app -> app.getUser().getId().equals(userId))
                 .toList();
@@ -53,6 +59,21 @@ public class ApplicationService {
                 .filter(app -> app.getInternship().getId().equals(internshipId))
                 .toList();
     }
+
+    public Boolean canStudentApply(Long internshipId, String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+        UserInfo user = userInfoRepository.findByName(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return applicationRepository.findAll().stream()
+                .filter(app -> app.getInternship().getId().equals(internshipId) && app.getUser().getId().equals(user.getId()))
+                .noneMatch(app ->
+                        app.getStatus().equals(ApplicationStatus.PENDING) ||
+                                app.getStatus().equals(ApplicationStatus.APPROVED)
+                );
+    }
+
 
     public Application acceptApplication(Long applicationId, String authorizationHeader) throws IllegalAccessException {
         Application application = applicationRepository.findById(applicationId)

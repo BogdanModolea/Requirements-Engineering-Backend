@@ -55,6 +55,16 @@ public class UserService {
         return userInfoRepository.findByName(username);
     }
 
+    public UserInfo getUserByToken(String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+
+        UserInfo user = userInfoRepository.findByName(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return user;
+    }
+
     public String getUserRole(String username) {
         return userInfoRepository.getRoleByUsername(username);
     }
