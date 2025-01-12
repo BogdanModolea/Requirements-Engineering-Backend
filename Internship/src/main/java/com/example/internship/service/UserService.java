@@ -1,7 +1,7 @@
 package com.example.internship.service;
 
 import com.example.internship.dto.AuthRequest;
-import com.example.internship.dto.LoginResponse;
+import com.example.internship.dto.StringDTO;
 import com.example.internship.entity.UserInfo;
 import com.example.internship.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +41,14 @@ public class UserService {
         userInfoRepository.save(userInfo);
     }
 
-    public LoginResponse authenticate(AuthRequest authRequest) {
+    public StringDTO authenticate(AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 
         if (authentication.isAuthenticated()) {
-            return new LoginResponse(jwtService.generateToken(authRequest.getUsername()));
+            return new StringDTO(jwtService.generateToken(authRequest.getUsername()));
         }
-        return new LoginResponse("Invalid");
+        return new StringDTO("Invalid");
     }
 
     public Optional<UserInfo> getUser(String username) {

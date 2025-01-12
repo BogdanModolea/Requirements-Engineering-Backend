@@ -1,5 +1,6 @@
 package com.example.internship.controller;
 
+import com.example.internship.dto.StringDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class Test {
 
     @GetMapping("/test")
-    public String test() {
-        return "Hello World!";
+    public StringDTO test() {
+        return new StringDTO( "Hello World!");
     }
 }

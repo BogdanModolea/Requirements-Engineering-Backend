@@ -1,7 +1,7 @@
 package com.example.internship.controller;
 
 import com.example.internship.dto.AuthRequest;
-import com.example.internship.dto.LoginResponse;
+import com.example.internship.dto.StringDTO;
 import com.example.internship.entity.UserInfo;
 import com.example.internship.service.JwtService;
 import com.example.internship.service.UserService;
@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<LoginResponse > authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletRequest request) {
+    public ResponseEntity<StringDTO> authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletRequest request) {
         return ResponseEntity.ok(userService.authenticate(authRequest));
     }
 
