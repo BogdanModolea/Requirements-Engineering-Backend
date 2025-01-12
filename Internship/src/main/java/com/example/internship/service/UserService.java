@@ -38,6 +38,7 @@ public class UserService {
     public void addUser(UserInfo userInfo) {
         userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         userInfo.setEnabled(true);
+        userInfo.setCompany("UBB");
         userInfoRepository.save(userInfo);
     }
 
