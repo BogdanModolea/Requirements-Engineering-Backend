@@ -1,11 +1,14 @@
 package com.example.internship.controller;
 
 import com.example.internship.dto.AuthRequest;
+import com.example.internship.dto.LoginResponse;
 import com.example.internship.entity.UserInfo;
 import com.example.internship.service.JwtService;
 import com.example.internship.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,8 +29,8 @@ public class UserController {
     }
 
     @PostMapping("/authenticate")
-    public String authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletRequest request) {
-        return userService.authenticate(authRequest);
+    public ResponseEntity<LoginResponse > authenticateAndGetToken(@RequestBody AuthRequest authRequest, HttpServletRequest request) {
+        return ResponseEntity.ok(userService.authenticate(authRequest));
     }
 
     @GetMapping("/getUserInfo/{username}")
