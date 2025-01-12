@@ -1,6 +1,7 @@
 package com.example.internship.service;
 
 import com.example.internship.entity.Internship;
+import com.example.internship.entity.enums.Technology;
 import com.example.internship.repository.InternshipRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -33,12 +34,16 @@ public class InternshipService {
         return internshipRepository.findAll();
     }
 
-    public List<Internship> filterInternships(Boolean paid, Boolean open, String company, Date startDate, Date endDate) {
+    public List<Internship> filterInternships(String technology, Boolean paid, Boolean open, String company, Date startDate, Date endDate) {
         // Create the base query
         StringBuilder queryString = new StringBuilder("SELECT i FROM Internship i WHERE 1=1");
         Map<String, Object> parameters = new HashMap<>();
 
         // Add conditions dynamically
+        if (technology != null) {
+            queryString.append(" AND i.technology = :technology");
+            parameters.put("technology", Technology.valueOf(technology));
+        }
         if (paid != null) {
             queryString.append(" AND i.paid = :paid");
             parameters.put("paid", paid);

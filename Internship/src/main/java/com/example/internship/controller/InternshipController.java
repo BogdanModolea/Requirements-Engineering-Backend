@@ -33,12 +33,13 @@ public class InternshipController {
 
     @GetMapping("/filter")
     public List<Internship> filterInternships(
+            @RequestParam(required = false) String technology,
             @RequestParam(required = false) Boolean paid,
             @RequestParam(required = false) Boolean open,
             @RequestParam(required = false) String company,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate
     ) {
-        return internshipService.filterInternships(paid, open, company, startDate, endDate);
+        return internshipService.filterInternships(technology, paid, open, company, startDate, endDate);
     }
 }
